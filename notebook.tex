@@ -1,0 +1,119 @@
+\documentclass[10pt,a4paper,landscape,oneside]{amsart}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage[top=3pt, bottom=1cm, left=0.3cm, right=0.3cm]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[scaled]{beramono}
+\usepackage{titling}
+\usepackage{datetime}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{bookmark}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{comment}
+
+% Toggle Table of Contents depth based on config
+\setcounter{tocdepth}{3}
+
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.1em\vspace{-1em}}%
+}
+
+% --- MINTED CONFIGURATION FOR PYTHON ---
+\usepackage{minted}
+% breaklines=true is CRITICAL for Python in a 3-column layout!
+% tabsize=4 ensures standard Python indentation spacing.
+\newcommand{\pycode}[1]{\inputminted[fontsize=\scriptsize, baselinestretch=1, tabsize=4, breaklines=true]{python}{_code/#1}}
+\newcommand{\bashcode}[1]{\inputminted[fontsize=\scriptsize, breaklines=true]{bash}{_code/#1}}
+
+% --- HEADER/FOOTER ---
+\pagestyle{fancy}
+\lhead{University of the Philippines - Baguio Progvar Notebook} % Change to your team name
+\rhead{\thepage}
+\cfoot{}
+\setlength{\headheight}{15.2pt}
+\setlength{\droptitle}{-20pt}
+\posttitle{\par\end{center}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% --- MATH AND BIT OPERATORS ---
+\DeclareMathOperator{\lcm}{lcm}
+\newcommand*\BitAnd{\mathrel{\&}}
+\newcommand*\BitOr{\mathrel{|}}
+\newcommand*\ShiftLeft{\ll}
+\newcommand*\ShiftRight{\gg}
+\newcommand*\BitNeg{\ensuremath{\mathord{\sim}}}
+\DeclareRobustCommand{\stirling}{\genfrac\{\}{0pt}{}}
+
+% --- COLOR CODED SECTIONS (Red = Untested, Black = Empty) ---
+\newcommand{\sectionRed}[1]{\section{\colorbox{red}{\color{white}#1}}}
+\newcommand{\subsectionRed}[1]{\subsection{\colorbox{red}{\color{white}#1}}}
+\newcommand{\subsubsectionRed}[1]{\subsubsection{\colorbox{red}{\color{white}#1}}}
+
+\newcommand{\sectionBlack}[1]{\section{\colorbox{black}{\color{white}#1}}}
+\newcommand{\subsectionBlack}[1]{\subsection{\colorbox{black}{\color{white}#1}}}
+\newcommand{\subsubsectionBlack}[1]{\subsubsection{\colorbox{black}{\color{white}#1}}}
+
+% --- COMPACT ITEMIZE ---
+\newenvironment{myitemize}
+{ \begin{itemize}[leftmargin=.5cm]
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}     }
+{ \end{itemize}                  }
+
+% --- TITLE/AUTHOR ---
+\title{University of the Philippines - Baguio}
+\subtitle{Archie Junio's Reference Notebook}
+\date{\ddmmyyyydate{\today{}}}
+\author{Archie Junio}
+
+% --- OUTPUT VERBOSITY ---
+\newif\ifverbose
+\verbosetrue
+% \verbosefalse
+
+\begin{document}
+
+\begin{multicols*}{3}
+\maketitle
+\thispagestyle{fancy}
+\vspace{-3em}
+\tableofcontents
+
+% --- IMPORTING CONTENT ---
+% Note: You will need to create a 'tex/' folder in your workspace
+% and create these .tex files (e.g., tex/data_structures.tex)
+
+\input{tex/01_Data_Structures}
+\input{tex/02_Dynamic_Programming}
+\input{tex/03_Geometry}
+\input{tex/04_Graphs}
+\input{tex/05_Math_I_Algebra}
+\input{tex/06_Math_II_Combinatorics}
+\input{tex/07_Math_III_Number_Theory}
+\input{tex/08_Math_IV_Numerical_Methods}
+\input{tex/09_Strings}
+
+% \input{tex/other}
+% \input{tex/useful_info}
+% \input{tex/other_combinatorics}
+
+\clearpage
+
+\end{multicols*}
+
+\end{document}

@@ -1,0 +1,30 @@
+class SegmentTree:
+    def __init__(self, data):
+        self.n = len(data)
+        self.tree = [0] * (2 * self.n)
+        for i in range(self.n):
+            self.tree[self.n + i] = data[i]
+        for i in range(self.n - 1, 0, -1):
+            self.tree[i] = self.tree[i << 1] + self.tree[i << 1 | 1]
+
+    def update(self, p, value):
+        p += self.n
+        self.tree[p] = value
+        while p > 1:
+            self.tree[p >> 1] = self.tree[p] + self.tree[p ^ 1]
+            p >>= 1
+
+    def query(self, l, r):
+        res = 0
+        l += self.n
+        r += self.n
+        while l < r:
+            if l & 1:
+                res += self.tree[l]
+                l += 1
+            if r & 1:
+                r -= 1
+                res += self.tree[r]
+            l >>= 1
+            r >>= 1
+        return res
