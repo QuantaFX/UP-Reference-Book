@@ -1,0 +1,78 @@
+from collections import deque
+
+INF = float('inf')
+class BipartiteGraph:
+    def __init__(self, n, m):
+        self.n = n
+        self.m = m
+        self.adj = [[] for _ in range(n)]
+        self.L = [-1] * n
+        self.R = [-1] * m
+        self.dist = [INF] * (n + 1)
+
+    def add_edge(self, u, v):
+        self.adj[u].append(v)
+
+    def bfs(self):
+        queue = deque()
+        for v in range(self.n):
+            if self.L[v] == -1:
+                self.dist[v] = 0
+                queue.append(v)
+            else:
+                self.dist[v] = INF
+
+        self.dist[self.n] = INF
+
+        while queue:
+            v = queue.popleft()
+            if self.dist[v] < self.dist[self.n]:
+                for u in self.adj[v]:
+                    next_v = self.R[u]
+                    dist_next = self.dist[next_v] if next_v != -1 else self.dist[self.n]
+
+                    if (next_v == -1 and self.dist[self.n] == INF) or \
+                            (next_v != -1 and self.dist[next_v] == INF):
+
+                        target = next_v if next_v != -1 else self.n
+                        self.dist[target] = self.dist[v] + 1
+                        if target != self.n:
+                            queue.append(target)
+
+        return self.dist[self.n] != INF
+
+    def dfs(self, v):
+        if v != -1:
+            for u in self.adj[v]:
+                next_v = self.R[u]
+                dist_next = self.dist[next_v] if next_v != -1 else self.dist[self.n]
+
+                if dist_next == self.dist[v] + 1:
+                    if self.dfs(next_v):
+                        self.R[u] = v
+                        self.L[v] = u
+                        return True
+            self.dist[v] = INF
+            return False
+        return True
+
+    def maximum_matching(self):
+        matching = 0
+        for u in range(self.n):
+            for v in self.adj[u]:
+                if self.R[v] == -1:
+                    self.L[u] = v
+                    self.R[v] = u
+                    matching += 1
+                    break
+
+        while self.bfs():
+            for i in range(self.n):
+                if self.L[i] == -1 and self.dfs(i):
+                    matching += 1
+        return matching
+# Input Format: g = BipartiteGraph(2, 2)
+#               g.add_edge(0, 0)
+#               g.add_edge(0, 1)
+#               g.add_edge(1, 0)
+#               print(f"Max Matching: {g.maximum_matching()}")
