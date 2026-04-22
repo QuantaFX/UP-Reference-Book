@@ -5,4 +5,3 @@ Graphs
   Shortest Path
     dijkstra.py
     bellman_ford.py
-    
