@@ -1,3 +1,4 @@
 Math III Number Theory
-    linear_diophantine.py
     gcd_subset_counter.py
+    linear_diophantine.py
+    chinese_remainder_theorem.py
