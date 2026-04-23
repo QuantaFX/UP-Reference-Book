@@ -1,0 +1,32 @@
+def min_mean_cycle(adj):
+    n = len(adj)
+    INF = float('inf')
+
+    arr = [[INF] * n for _ in range(n + 1)]
+
+    for i in range(n):
+        arr[0][i] = 0
+
+    for k in range(1, n + 1):
+        for u in range(n):
+            if arr[k - 1][u] == INF:
+                continue
+            for v, w in adj[u]:
+                arr[k][v] = min(arr[k][v], arr[k - 1][u] + w)
+
+    result = INF
+
+    for v in range(n):
+        if arr[n][v] == INF:
+            continue
+
+        max_avg = -INF
+        for k in range(n):
+            if arr[k][v] == INF:
+                continue
+            avg = (arr[n][v] - arr[k][v]) / (n - k)
+            max_avg = max(max_avg, avg)
+
+        result = min(result, max_avg)
+
+    return result
