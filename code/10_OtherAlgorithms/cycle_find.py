@@ -1,0 +1,22 @@
+def find_cycle(x0, f):
+    t = f(x0)
+    h = f(f(x0))
+
+    while t != h:
+        t = f(t)
+        h = f(f(h))
+
+    mu = 0
+    h = x0
+    while t != h:
+        t = f(t)
+        h = f(h)
+        mu += 1
+
+    lam = 1
+    h = f(t)
+    while t != h:
+        h = f(h)
+        lam += 1
+
+    return mu, lam
