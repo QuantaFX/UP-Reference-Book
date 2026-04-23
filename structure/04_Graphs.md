@@ -9,3 +9,7 @@ Graphs
   Minimum Spanning Tree
     kruskal_min_spanning_tree.py
     prim_min_spanning_tree.py
+  Least Common Ancestor
+    binary_lifting_LCA.py
+    euler_LCA.py
+    tarjan_LCA.py

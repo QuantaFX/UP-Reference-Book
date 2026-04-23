@@ -1,0 +1,39 @@
+class DSU:
+    def __init__(self, n):
+        self.p = list(range(n))
+
+    def find(self, x):
+        if self.p[x] != x:
+            self.p[x] = self.find(self.p[x])
+        return self.p[x]
+
+    def unite(self, a, b):
+        self.p[self.find(b)] = self.find(a)
+
+
+class Tarjan:
+    def __init__(self, adj, queries):
+        self.adj = adj
+        self.queries = queries
+        self.n = len(adj)
+
+        self.dsu = DSU(self.n)
+        self.vis = [False] * self.n
+        self.anc = [0] * self.n
+        self.res = {}
+
+    def dfs(self, u, p):
+        self.anc[u] = u
+
+        for v in self.adj[u]:
+            if v == p:
+                continue
+            self.dfs(v, u)
+            self.dsu.unite(u, v)
+            self.anc[self.dsu.find(u)] = u
+
+        self.vis[u] = True
+
+        for v, idx in self.queries[u]:
+            if self.vis[v]:
+                self.res[idx] = self.anc[self.dsu.find(v)]
