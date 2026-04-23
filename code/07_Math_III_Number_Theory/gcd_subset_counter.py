@@ -1,0 +1,25 @@
+def gcd_subset_count(arr):
+    n = len(arr)
+    mx = max(arr)
+
+    f = [0] * (mx + 1)
+    for x in arr:
+        f[x] += 1
+
+    gcnt = [0] * (mx + 1)
+
+    for i in range(mx, 0, -1):
+        add = 0
+
+        for j in range(i, mx + 1, i):
+            add += f[j]
+
+        total = (1 << add) - 1  # 2^add - 1
+
+        sub = 0
+        for j in range(2 * i, mx + 1, i):
+            sub += gcnt[j]
+
+        gcnt[i] = total - sub
+
+    return gcnt
