@@ -13,3 +13,4 @@ Geometry
     triangle_area.py
     polygon_area.py
   dot_cross.py
+  line_sweep_closest_pair.py
