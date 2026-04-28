@@ -3,3 +3,4 @@ Other Algorithms
     cycle_find.py
     2SAT.py
     DPLL.py
+    stable_marriage.py
