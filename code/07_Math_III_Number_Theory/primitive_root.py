@@ -1,0 +1,30 @@
+def primitive_root(m):
+    if m == 2:
+        return 1
+
+    phi = m - 1
+
+    factors = set()
+    x = phi
+    i = 2
+
+    while i * i <= x:
+        if x % i == 0:
+            factors.add(i)
+            while x % i == 0:
+                x //= i
+        i += 1
+
+    if x > 1:
+        factors.add(x)
+
+    for g in range(2, m):
+        ok = True
+        for f in factors:
+            if mod_pow(g, phi // f, m) == 1:
+                ok = False
+                break
+        if ok:
+            return g
+
+    return -1

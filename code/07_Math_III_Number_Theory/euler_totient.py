@@ -1,0 +1,18 @@
+def totient(n):
+    if n <= 1:
+        return 1
+
+    tot = n
+    i = 2
+
+    while i * i <= n:
+        if n % i == 0:
+            tot -= tot // i
+            while n % i == 0:
+                n //= i
+        i += 1
+
+    if n > 1:
+        tot -= tot // n
+
+    return tot

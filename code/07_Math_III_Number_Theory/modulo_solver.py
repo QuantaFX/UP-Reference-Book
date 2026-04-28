@@ -1,0 +1,23 @@
+def extended_euclid(a, b):
+    if b == 0:
+        return a, 1, 0
+
+    g, x1, y1 = extended_euclid(b, a % b)
+
+    x = y1
+    y = x1 - (a // b) * y1
+
+    return g, x, y
+
+
+def modsolver(a, b, m):
+    g, x, y = extended_euclid(a, m)
+
+    if b % g != 0:
+        return (-1, -1)
+
+    m_reduced = m // g
+
+    x0 = (x * (b // g)) % m_reduced
+
+    return (x0, m_reduced)

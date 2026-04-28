@@ -1,0 +1,18 @@
+def mod(x, m):
+    if m == 0:
+        return 0
+    if m < 0:
+        m = -m
+    return (x % m + m) % m
+
+
+def extended_euclid(a, b):
+    if b == 0:
+        return a, 1, 0
+
+    g, x1, y1 = extended_euclid(b, a % b)
+
+    x = y1
+    y = x1 - (a // b) * y1
+
+    return g, x, y
