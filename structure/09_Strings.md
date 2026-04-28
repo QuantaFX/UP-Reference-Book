@@ -5,3 +5,4 @@ Strings
     aho_corasick_trie.py
     knuth_morris_pratt.py
     trie.py
+    suffix_array.py
