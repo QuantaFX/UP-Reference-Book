@@ -1,0 +1,39 @@
+class KosarajuGraph:
+    def __init__(self, n):
+        self.n = n
+        self.graph = [[] for _ in range(n)]
+        self.rev_graph = [[] for _ in range(n)]
+        self.vis = [0] * n
+        self.sccs = []
+
+    def add_edge(self, u, v):
+        self.graph[u].append(v)
+        self.rev_graph[v].append(u)
+
+    def dfs(self, u, adj, container):
+        self.vis[u] = 1
+        for v in adj[u]:
+            if not self.vis[v]:
+                self.dfs(v, adj, container)
+        container.append(u)
+
+    def kosaraju(self):
+        topo = []
+
+        # First pass
+        self.vis = [0] * self.n
+        for i in range(self.n):
+            if not self.vis[i]:
+                self.dfs(i, self.graph, topo)
+
+        # Second pass
+        self.vis = [0] * self.n
+        self.sccs = []
+
+        for u in reversed(topo):
+            if not self.vis[u]:
+                comp = []
+                self.dfs(u, self.rev_graph, comp)
+                self.sccs.append(comp)
+
+        return self.sccs

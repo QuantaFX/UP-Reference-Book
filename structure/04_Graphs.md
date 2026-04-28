@@ -14,3 +14,4 @@ Graphs
     euler_LCA.py
     tarjan_LCA.py
   minimum_mean_weight_cycle.py
+  strongly_connected_components.py
