@@ -5,3 +5,6 @@ Other Algorithms
     DPLL.py
     stable_marriage.py
     dates.py
+    simulated_annealing.py
+    fast_input_reading.py
+    bit_hacks.py
