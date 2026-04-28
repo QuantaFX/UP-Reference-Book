@@ -1,0 +1,99 @@
+class SAT:
+    def __init__(self):
+        self.clauses = []
+        self.n = 0
+
+    def var(self):
+        self.n += 1
+        return self.n
+
+    def clause(self, c):
+        self.clauses.append(c)
+
+    def clause_sat(self, clause, assign):
+        unknown = False
+
+        for x in clause:
+            v = abs(x)
+            val = assign[v]
+
+            if x > 0 and val == 1:
+                return True
+            if x < 0 and val == 0:
+                return True
+
+            if val == -1:
+                unknown = True
+
+        return False if not unknown else None
+
+    def propagate(self, assign):
+        changed = True
+
+        while changed:
+            changed = False
+
+            for clause in self.clauses:
+                sat = False
+                unassigned = []
+
+                for x in clause:
+                    v = abs(x)
+
+                    if x > 0 and assign[v] == 1:
+                        sat = True
+                        break
+                    if x < 0 and assign[v] == 0:
+                        sat = True
+                        break
+
+                    if assign[v] == -1:
+                        unassigned.append(x)
+
+                if sat:
+                    continue
+
+                if len(unassigned) == 0:
+                    return False  # contradiction
+
+                if len(unassigned) == 1:
+                    x = unassigned[0]
+                    v = abs(x)
+                    val = 1 if x > 0 else 0
+
+                    if assign[v] != -1 and assign[v] != val:
+                        return False
+
+                    if assign[v] == -1:
+                        assign[v] = val
+                        changed = True
+
+        return True
+
+    def solve_dfs(self, assign, idx=1):
+        if idx > self.n:
+            return True
+
+        if assign[idx] != -1:
+            return self.solve_dfs(assign, idx + 1)
+
+        for val in [0, 1]:
+            new_assign = assign[:]
+            new_assign[idx] = val
+
+            if self.propagate(new_assign):
+                if self.solve_dfs(new_assign, idx + 1):
+                    return True
+
+        return False
+
+    def solve(self):
+        assign = [-1] * (self.n + 1)
+
+        if not self.propagate(assign):
+            return False
+
+        return self.solve_dfs(assign)
+
+    def get_value(self, x):
+        return self.assign[x] == 1
