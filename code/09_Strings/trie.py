@@ -1,0 +1,46 @@
+class Node:
+    def __init__(self):
+        self.children = {}
+        self.prefixes = 0
+        self.words = 0
+
+class Trie:
+    def __init__(self):
+        self.root = Node()
+
+    def insert(self, seq):
+        cur = self.root
+
+        for i in range(len(seq) + 1):
+            cur.prefixes += 1
+
+            if i == len(seq):
+                cur.words += 1
+                break
+
+            head = seq[i]
+
+            if head not in cur.children:
+                cur.children[head] = Node()
+
+            cur = cur.children[head]
+
+    def countMatches(self, seq):
+        cur = self.root
+
+        for c in seq:
+            if c not in cur.children:
+                return 0
+            cur = cur.children[c]
+
+        return cur.words
+
+    def countPrefixes(self, seq):
+        cur = self.root
+
+        for c in seq:
+            if c not in cur.children:
+                return 0
+            cur = cur.children[c]
+
+        return cur.prefixes
