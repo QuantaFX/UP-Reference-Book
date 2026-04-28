@@ -1,0 +1,68 @@
+import sys
+sys.setrecursionlimit(10**7)
+
+INF = 10**9
+
+class CentroidDecomposition:
+    def __init__(self, n):
+        self.n = n
+        self.adj = [[] for _ in range(n)]
+
+        self.LG = 20
+        self.jmp = [[-1] * self.LG for _ in range(n)]
+        self.path = [[INF] * self.LG for _ in range(n)]
+
+        self.sz = [0] * n
+        self.seph = [0] * n
+        self.shortest = [INF] * n
+        self.blocked = [False] * n
+
+    def add_edge(self, a, b):
+        self.adj[a].append(b)
+        self.adj[b].append(a)
+
+    def dfs(self, u, p):
+        self.sz[u] = 1
+        for v in self.adj[u]:
+            if v != p and not self.blocked[v]:
+                self.sz[u] += self.dfs(v, u)
+        return self.sz[u]
+
+    def find_centroid(self, u, p, n):
+        for v in self.adj[u]:
+            if v != p and not self.blocked[v] and self.sz[v] > n // 2:
+                return self.find_centroid(v, u, n)
+        return u
+
+    def makepaths(self, sep, u, p, depth, h):
+        self.jmp[u][h] = sep
+        self.path[u][h] = depth
+
+        for v in self.adj[u]:
+            if v != p and not self.blocked[v]:
+                self.makepaths(sep, v, u, depth + 1, h)
+
+    def separate(self, h=0, u=0):
+        self.dfs(u, -1)
+        c = self.find_centroid(u, -1, self.sz[u])
+
+        self.seph[c] = h
+        self.makepaths(c, c, -1, 0, h)
+
+        self.blocked[c] = True
+
+        for v in self.adj[c]:
+            if not self.blocked[v]:
+                self.separate(h + 1, v)
+
+    def paint(self, u):
+        for h in range(self.seph[u] + 1):
+            c = self.jmp[u][h]
+            self.shortest[c] = min(self.shortest[c], self.path[u][h])
+
+    def closest(self, u):
+        ans = INF
+        for h in range(self.seph[u] + 1):
+            c = self.jmp[u][h]
+            ans = min(ans, self.shortest[c] + self.path[u][h])
+        return ans

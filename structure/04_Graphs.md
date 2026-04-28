@@ -18,3 +18,4 @@ Graphs
   heavy_light_decomposition.py
   euler_path_and_cycle.py
   tree_isomorphism.py
+  centroid_decomposition.py
