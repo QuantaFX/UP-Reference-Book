@@ -1,0 +1,47 @@
+def build_kmp(f):
+    n = len(f)
+    par = [0] * (n + 1)
+
+    par[0] = -1
+    if n > 0:
+        par[1] = 0
+
+    i, j = 2, 0
+
+    while i <= n:
+        if f[i - 1] == f[j]:
+            j += 1
+            par[i] = j
+            i += 1
+        elif j > 0:
+            j = par[j]
+        else:
+            par[i] = 0
+            i += 1
+
+    return par
+
+
+def kmp(s, f):
+    par = build_kmp(f)
+
+    i = 0
+    j = 0
+    ans = []
+
+    n, m = len(s), len(f)
+
+    while i + j < n:
+        if s[i + j] == f[j]:
+            j += 1
+            if j == m:
+                ans.append(i)
+                i += j - par[j]
+                if j > 0:
+                    j = par[j]
+        else:
+            i += j - par[j]
+            if j > 0:
+                j = par[j]
+
+    return ans
