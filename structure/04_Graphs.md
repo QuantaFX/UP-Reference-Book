@@ -16,3 +16,4 @@ Graphs
   minimum_mean_weight_cycle.py
   strongly_connected_components.py
   heavy_light_decomposition.py
+  euler_path_and_cycle.py
