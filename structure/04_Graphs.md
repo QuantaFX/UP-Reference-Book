@@ -17,3 +17,4 @@ Graphs
   strongly_connected_components.py
   heavy_light_decomposition.py
   euler_path_and_cycle.py
+  tree_isomorphism.py
