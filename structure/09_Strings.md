@@ -6,3 +6,4 @@ Strings
     knuth_morris_pratt.py
     trie.py
     suffix_array.py
+    booth_min_string_rotation.py
