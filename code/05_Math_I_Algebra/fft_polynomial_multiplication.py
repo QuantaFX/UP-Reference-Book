@@ -1,0 +1,21 @@
+def fft_multiply(a, b):
+    an, bn = len(a), len(b)
+    degree = an + bn - 1
+
+    n = 1
+    while n < degree:
+        n <<= 1
+
+    A = [Poly(x, 0) for x in a] + [Poly(0, 0)] * (n - an)
+    B = [Poly(x, 0) for x in b] + [Poly(0, 0)] * (n - bn)
+
+    A = fft(A)
+    B = fft(B)
+
+    for i in range(n):
+        A[i] = A[i] * B[i]
+
+    A = inverse_fft(A)
+
+    result = [int(round(A[i].a)) for i in range(degree)]
+    return result

@@ -1,0 +1,41 @@
+EPS = 1e-9
+
+def gauss_jordan(A):
+    n = len(A)
+    m = len(A[0])
+
+    singular = False
+
+    i = 0
+    for p in range(m):
+        if i >= n:
+            break
+
+        pivot = i
+        for k in range(i + 1, n):
+            if abs(A[k][p]) > abs(A[pivot][p]):
+                pivot = k
+
+        if abs(A[pivot][p]) < EPS:
+            singular = True
+            continue
+
+        A[i], A[pivot] = A[pivot], A[i]
+
+        div = A[i][p]
+        for j in range(p, m):
+            A[i][j] /= div
+
+        for k in range(n):
+            if k == i:
+                continue
+            factor = A[k][p]
+            for j in range(p, m):
+                A[k][j] -= factor * A[i][j]
+
+        i += 1
+
+    return not singular
+
+def apply(A, x):
+    return [sum(A[i][j] * x[j] for j in range(len(x))) for i in range(len(A))]

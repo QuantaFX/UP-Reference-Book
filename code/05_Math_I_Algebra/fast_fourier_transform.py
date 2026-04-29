@@ -1,0 +1,60 @@
+import math
+
+class Poly:
+    def __init__(self, a=0.0, b=0.0):
+        self.a = a
+        self.b = b
+
+    def __add__(self, other):
+        return Poly(self.a + other.a, self.b + other.b)
+
+    def __sub__(self, other):
+        return Poly(self.a - other.a, self.b - other.b)
+
+    def __mul__(self, other):
+        return Poly(
+            self.a * other.a - self.b * other.b,
+            self.a * other.b + self.b * other.a
+        )
+
+    def __repr__(self):
+        return f"({self.a}+{self.b}i)"
+
+def fft_recursive(inp, n, s):
+    if n == 1:
+        return [inp[0]]
+
+    half = n // 2
+
+    even = fft_recursive(inp, half, s * 2)
+    odd = fft_recursive(inp[s:], half, s * 2)
+
+    res = [None] * n
+    w = Poly(1, 0)
+    wn = Poly(math.cos(math.pi / half), math.sin(math.pi / half))
+
+    for i in range(half):
+        t = w * odd[i]
+        res[i] = even[i] + t
+        res[i + half] = even[i] - t
+        w = w * wn
+
+    return res
+
+def fft(p):
+    return fft_recursive(p, len(p), 1)
+
+def inverse_fft(p):
+    n = len(p)
+
+    p = [Poly(x.a, -x.b) for x in p]
+
+    p = fft(p)
+
+    res = []
+    for x in p:
+        res.append(Poly(x.a / n, -x.b / n))
+
+    return res
+
+

@@ -1,0 +1,120 @@
+MOD = 998244353
+G = 3
+
+def mod_pow(a, e):
+    r = 1
+    while e:
+        if e & 1:
+            r = r * a % MOD
+        a = a * a % MOD
+        e >>= 1
+    return r
+
+def bit_reverse(a):
+    n = len(a)
+    j = 0
+    for i in range(1, n):
+        bit = n >> 1
+        while j & bit:
+            j ^= bit
+            bit >>= 1
+        j ^= bit
+        if i < j:
+            a[i], a[j] = a[j], a[i]
+
+
+def ntt(a, invert=False):
+    n = len(a)
+    bit_reverse(a)
+
+    length = 2
+    while length <= n:
+        wlen = mod_pow(G, (MOD - 1) // length)
+        if invert:
+            wlen = mod_pow(wlen, MOD - 2)
+
+        for i in range(0, n, length):
+            w = 1
+            half = length // 2
+            for j in range(i, i + half):
+                u = a[j]
+                v = a[j + half] * w % MOD
+                a[j] = (u + v) % MOD
+                a[j + half] = (u - v) % MOD
+                w = w * wlen % MOD
+
+        length <<= 1
+
+    if invert:
+        inv_n = mod_pow(n, MOD - 2)
+        for i in range(n):
+            a[i] = a[i] * inv_n % MOD
+
+def multiply(a, b):
+    n = 1
+    while n < len(a) + len(b):
+        n <<= 1
+
+    fa = a[:] + [0] * (n - len(a))
+    fb = b[:] + [0] * (n - len(b))
+
+    ntt(fa)
+    ntt(fb)
+
+    for i in range(n):
+        fa[i] = fa[i] * fb[i] % MOD
+
+    ntt(fa, True)
+
+    return fa[:len(a) + len(b) - 1]
+
+def poly_inv(f, n):
+    if n == 1:
+        return [mod_pow(f[0], MOD - 2)]
+
+    m = (n + 1) // 2
+    g = poly_inv(f, m)
+
+    size = 1
+    while size < 2 * n:
+        size <<= 1
+
+    a = f[:n] + [0] * (size - len(f[:n]))
+    g = g + [0] * (size - len(g))
+
+    ntt(a)
+    ntt(g)
+
+    for i in range(size):
+        g[i] = g[i] * (2 - a[i] * g[i] % MOD) % MOD
+
+    ntt(g, True)
+
+    return g[:n]
+
+def poly_divide(A, B):
+    n, m = len(A), len(B)
+
+    if n < m:
+        return [], A[:]
+
+    k = n - m + 1
+
+    A_rev = A[::-1]
+    B_rev = B[::-1]
+
+    B_inv = poly_inv(B_rev, k)
+
+    Q_rev = multiply(A_rev, B_inv)[:k]
+    Q = Q_rev[::-1]
+
+    BQ = multiply(B, Q)
+
+    R = [(A[i] - (BQ[i] if i < len(BQ) else 0)) % MOD for i in range(n)]
+
+    while Q and Q[-1] == 0:
+        Q.pop()
+    while R and R[-1] == 0:
+        R.pop()
+
+    return Q, R
