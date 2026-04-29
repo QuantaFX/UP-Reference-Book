@@ -1,0 +1,50 @@
+import math
+
+EPS = 1e-9
+def dist(a, b):
+    return math.hypot(a[0] - b[0], a[1] - b[1])
+def mid(a, b):
+    return ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+def cross(a, b, c):
+    return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+def circumcenter(a, b, c):
+    ax, ay = a
+    bx, by = b
+    cx, cy = c
+    d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
+    if abs(d) < EPS:
+        return mid(a, b)
+    ux = (
+        (ax * ax + ay * ay) * (by - cy)
+        + (bx * bx + by * by) * (cy - ay)
+        + (cx * cx + cy * cy) * (ay - by)
+    ) / d
+    uy = (
+        (ax * ax + ay * ay) * (cx - bx)
+        + (bx * bx + by * by) * (ax - cx)
+        + (cx * cx + cy * cy) * (bx - ax)
+    ) / d
+    return (ux, uy)
+def bounding_ball(p):
+    random.shuffle(p)
+    center = p[0]
+    radius = 0.0
+    n = len(p)
+    for i in range(n):
+        if dist(center, p[i]) > radius + EPS:
+            center = p[i]
+            radius = 0.0
+            for j in range(i):
+                if dist(center, p[j]) > radius + EPS:
+                    center = mid(p[i], p[j])
+                    radius = dist(center, p[i])
+                    for k in range(j):
+                        if dist(center, p[k]) > radius + EPS:
+                            center = circumcenter(p[i], p[j], p[k])
+                            radius = dist(center, p[i])
+    return center, radius
+def verify(p, center, r):
+    for x in p:
+        if dist(x, center) > r + 1e-6:
+            return False
+    return True

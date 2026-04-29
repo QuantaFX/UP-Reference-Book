@@ -18,3 +18,9 @@ Geometry
   great_circle_distance.py
   point_in_polygon.py
   cut_polygon_by_line.py
+  triangle_centers.py
+  convex_polygon_intersection.py
+  pick_theorem_lattice.py
+  minimum_enclosing_circle.py
+  shamos_algorithm.py
+  kd_tree.py

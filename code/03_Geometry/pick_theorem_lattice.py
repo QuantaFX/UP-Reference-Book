@@ -1,0 +1,22 @@
+import math
+
+def area(poly):
+    n = len(poly)
+    s = 0
+    for i in range(n):
+        j = (i - 1) % n
+        s += poly[j][0] * poly[i][1] - poly[i][0] * poly[j][1]
+    return abs(s) // 2
+def boundary(poly):
+    n = len(poly)
+    ans = 0
+    for i in range(n):
+        j = (i - 1) % n
+        dx = poly[i][0] - poly[j][0]
+        dy = poly[i][1] - poly[j][1]
+        ans += math.gcd(abs(dx), abs(dy))
+    return ans
+def interior(poly):
+    A = area(poly)
+    B = boundary(poly)
+    return A - B // 2 + 1
