@@ -6,4 +6,4 @@ Math I Algebra
     polynomial_long_division.py 
     matrix_multiplication.py
     matrix_power.py
-    fibonacci_matrix.py
+    gauss_jordan_matrix_determinant.py
