@@ -14,3 +14,7 @@ Geometry
     polygon_area.py
   dot_cross.py
   line_sweep_closest_pair.py
+  point_projection.py
+  great_circle_distance.py
+  point_in_polygon.py
+  cut_polygon_by_line.py
