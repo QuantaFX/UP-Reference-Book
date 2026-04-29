@@ -1,9 +1,12 @@
 Strings
-    longest_common_prefix.py
-    hasher.py
-    z_algorithm.py
-    aho_corasick_trie.py
-    knuth_morris_pratt.py
-    trie.py
-    suffix_array.py
-    booth_min_string_rotation.py
+  longest_common_prefix.py
+  hasher.py
+  z_algorithm.py
+  aho_corasick_trie.py
+  Palindromes
+    palindromic_tree.py
+    eertree.py
+  knuth_morris_pratt.py
+  trie.py
+  suffix_array.py
+  booth_min_string_rotation.py
