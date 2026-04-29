@@ -1,0 +1,50 @@
+import bisect
+
+class LeqCounter:
+    def __init__(self, arr):
+        self.n = len(arr)
+        self.seg = [[] for _ in range(4 * self.n)]
+        self._build(1, 0, self.n - 1, arr)
+
+    def _build(self, idx, l, r, arr):
+        if l == r:
+            self.seg[idx] = [arr[l]]
+            return
+        m = (l + r) // 2
+        self._build(idx * 2, l, m, arr)
+        self._build(idx * 2 + 1, m + 1, r, arr)
+
+        # merge
+        self.seg[idx] = sorted(self.seg[idx * 2] + self.seg[idx * 2 + 1])
+
+    def _query(self, idx, l, r, ql, qr, x):
+        if qr < l or r < ql:
+            return 0
+        if ql <= l and r <= qr:
+            return bisect.bisect_right(self.seg[idx], x)
+
+        m = (l + r) // 2
+        return (
+            self._query(idx * 2, l, m, ql, qr, x) +
+            self._query(idx * 2 + 1, m + 1, r, ql, qr, x)
+        )
+
+    def count(self, l, r, x):
+        if l > r:
+            return 0
+        return self._query(1, 0, self.n - 1, l, r, x)
+
+class UniqueCounter:
+    def __init__(self, A):
+        n = len(A)
+        self.B = [0] * (n + 1)
+        last = {}
+
+        for i in range(1, n + 1):
+            val = A[i - 1]
+            self.B[i] = last.get(val, 0)
+            last[val] = i
+        self.leq = LeqCounter(self.B)
+
+    def count(self, l, r):
+        return self.leq.count(l + 1, r + 1, l)
