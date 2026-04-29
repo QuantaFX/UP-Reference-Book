@@ -22,3 +22,5 @@ Graphs
   tree_isomorphism.py
   centroid_decomposition.py
   minimum_arborescence.py
+  biconnected_components.py
+  blossom.py

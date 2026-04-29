@@ -1,0 +1,96 @@
+from collections import deque
+
+class Blossom:
+    def __init__(self, n):
+        self.n = n
+        self.g = [[] for _ in range(n)]
+
+        self.match = [-1] * n
+        self.base = list(range(n))
+        self.parent = [-1] * n
+        self.used = [False] * n
+        self.blossom = [False] * n
+
+    def add_edge(self, u, v):
+        if u == v:
+            return  # avoid self-loops
+        self.g[u].append(v)
+        self.g[v].append(u)
+
+    def lca(self, a, b):
+        used = [False] * self.n
+        while True:
+            a = self.base[a]
+            used[a] = True
+            if self.match[a] == -1:
+                break
+            a = self.parent[self.match[a]]
+
+        while True:
+            b = self.base[b]
+            if used[b]:
+                return b
+            b = self.parent[self.match[b]]
+
+    def mark_blossom(self, v, b, children):
+        while self.base[v] != b:
+            self.blossom[self.base[v]] = self.blossom[self.base[self.match[v]]] = True
+            self.parent[v] = children
+            children = self.match[v]
+            v = self.parent[self.match[v]]
+
+    def find_path(self, root):
+        self.used = [False] * self.n
+        self.parent = [-1] * self.n
+        for i in range(self.n):
+            self.base[i] = i
+
+        q = deque()
+        q.append(root)
+        self.used[root] = True
+
+        while q:
+            v = q.popleft()
+            for u in self.g[v]:
+                if self.base[v] == self.base[u] or self.match[v] == u:
+                    continue
+
+                if u == root or (self.match[u] != -1 and self.parent[self.match[u]] != -1):
+                    curbase = self.lca(v, u)
+                    self.blossom = [False] * self.n
+                    self.mark_blossom(v, curbase, u)
+                    self.mark_blossom(u, curbase, v)
+
+                    for i in range(self.n):
+                        if self.blossom[self.base[i]]:
+                            self.base[i] = curbase
+                            if not self.used[i]:
+                                self.used[i] = True
+                                q.append(i)
+
+                elif self.parent[u] == -1:
+                    self.parent[u] = v
+                    if self.match[u] == -1:
+                        return u
+                    u2 = self.match[u]
+                    self.used[u2] = True
+                    q.append(u2)
+        return -1
+
+    def max_matching(self):
+        result = 0
+        for i in range(self.n):
+            if self.match[i] == -1:
+                v = self.find_path(i)
+                if v == -1:
+                    continue
+
+                # augment path
+                while v != -1:
+                    pv = self.parent[v]
+                    nv = self.match[pv] if pv != -1 else -1
+                    self.match[v] = pv
+                    self.match[pv] = v
+                    v = nv
+                result += 1
+        return result
