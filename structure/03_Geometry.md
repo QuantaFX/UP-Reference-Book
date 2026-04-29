@@ -6,6 +6,7 @@ Geometry
     circle_circle_intersection.py
     line_intersect.py
   red|closest_pair.py
+  polygon_centroid.py
   Convex Hull
     convex_hull.py
     convex_hull_3d.py
