@@ -1,8 +1,6 @@
 Graphs
   Max Flow
     dinic.py
-    edmonds_karp.py
-    bipartite_matching.py
   Shortest Path
     dijkstra.py
     bellman_ford.py
@@ -20,7 +18,3 @@ Graphs
     directed_euler.py
     undirected_euler.py
   tree_isomorphism.py
-  centroid_decomposition.py
-  minimum_arborescence.py
-  biconnected_components.py
-  blossom.py
